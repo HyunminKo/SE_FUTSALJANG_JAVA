@@ -2,8 +2,10 @@ package DAO;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 
 public class FutsalcenterDAO {
+	private String centerNo;
 	private String hostNo;
 	private String centerName;
 	private String city;
@@ -13,7 +15,14 @@ public class FutsalcenterDAO {
 	private String sectionNum;
 	private String centerPhone;
 	private String imgUrl;
-
+	
+	
+	public String getCenterNo() {
+		return centerNo;
+	}
+	public void setCenterNo(String centerNo) {
+		this.centerNo = centerNo;
+	}
 	public String getHostNo() {
 		return hostNo;
 	}
@@ -99,6 +108,21 @@ public class FutsalcenterDAO {
 		this.centerPhone = centerPhone;
 		this.imgUrl = imgUrl;
 	}
+	
+	public FutsalcenterDAO(String centerNo, String hostNo, String centerName, String city, String ku,
+			String detailAddress, String charge, String sectionNum, String centerPhone, String imgUrl) {
+		super();
+		this.centerNo = centerNo;
+		this.hostNo = hostNo;
+		this.centerName = centerName;
+		this.city = city;
+		this.ku = ku;
+		this.detailAddress = detailAddress;
+		this.charge = charge;
+		this.sectionNum = sectionNum;
+		this.centerPhone = centerPhone;
+		this.imgUrl = imgUrl;
+	}
 	public FutsalcenterDAO() {
 	}
 	public boolean enroll(){
@@ -118,5 +142,23 @@ public class FutsalcenterDAO {
 			}
 		}
 		return false;
+	}
+	public void select(List<FutsalcenterDAO> list){
+		DAO dao = new DAO();
+		ResultSet rs = null;
+		if(dao.createConn()){
+			rs = dao.select(dao.getConn(), "select * from FUTSALCENTER");
+			try {
+				while(rs.next()){
+					list.add(new FutsalcenterDAO(rs.getString(1),rs.getString(2),rs.getString(3),rs.getString(4),rs.getString(5),rs.getString(6),
+							rs.getString(7),rs.getString(8),rs.getString(9),rs.getString(10)));
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			finally{
+				dao.closeConn();
+			}
+		}
 	}
 }
