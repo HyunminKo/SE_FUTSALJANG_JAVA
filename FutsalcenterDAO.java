@@ -124,6 +124,7 @@ public class FutsalcenterDAO {
 		this.imgUrl = imgUrl;
 	}
 	public FutsalcenterDAO() {
+		super();
 	}
 	public boolean enroll(){
 		DAO dao = new DAO();

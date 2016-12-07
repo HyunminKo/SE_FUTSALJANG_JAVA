@@ -29,30 +29,36 @@ public class TeamDAO {
 	public TeamDAO() {
 		super();
 	}
-	
 	public TeamDAO(String teamName, String teamDescription){
 		super();
 		this.teamName = teamName;
 		this.teamDescription = teamDescription;
 	}
-//	public boolean enroll(){
-//		DAO dao = new DAO();
-//		ResultSet rs = null;
-//		if(dao.createConn()){
-//			rs = dao.select(dao.getConn(), "select * from FUTSALCENTER where centerName = '"+this.centerName+"'");
-//			try {
-//				if(rs.next()!=true){
-//					dao.insert(dao.getConn(), "INSERT INTO FUTSALCENTER (CENTERNO, HOSTNO, CENTERNAME, CITY, KU,DETAILADDRESS, CHARGE, SECTIONNUM, CENTERPHONE,IMGURL) VALUES (centerSeq.nextval,'"+this.hostNo+"','"+this.centerName+"','"+this.city+"','"+this.ku+"','"+this.detailAddress+"','"+this.charge+"','"+this.sectionNum+"','"+this.centerPhone+"','"+this.imgUrl+"')");
-//					return true;
-//				}
-//				else
-//					return false;
-//			} catch (SQLException e) {
-//				e.printStackTrace();
-//			}
-//		}
-//		return false;
-//	}
+	
+	public TeamDAO(String teamNo, String teamName, String teamDescription){
+		super();
+		this.teamNo = teamNo;
+		this.teamName = teamName;
+		this.teamDescription = teamDescription;
+	}
+	public boolean enroll(){
+		DAO dao = new DAO();
+		ResultSet rs = null;
+		if(dao.createConn()){
+			rs = dao.select(dao.getConn(), "select * from TEAM where teamName = '"+this.teamName+"'");
+			try {
+				if(rs.next()!=true){
+					dao.insert(dao.getConn(), "INSERT INTO TEAM (TEAMNO, TEAMNAME, DESCRIPTION) VALUES (teamSeq.nextval,'"+this.teamName+"','"+this.teamDescription+"')");
+					return true;
+				}
+				else
+					return false;
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return false;
+	}
 	public void select(List<TeamDAO> list){
 		DAO dao = new DAO();
 		ResultSet rs = null;
@@ -60,7 +66,7 @@ public class TeamDAO {
 			rs = dao.select(dao.getConn(), "select * from TEAM");
 			try {
 				while(rs.next()){
-					list.add(new TeamDAO(rs.getString(2),rs.getString(3)));
+					list.add(new TeamDAO(rs.getString(1),rs.getString(2),rs.getString(3)));
 				}
 			} catch (SQLException e) {
 				e.printStackTrace();
