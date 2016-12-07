@@ -94,7 +94,18 @@ public class FutsalcenterDAO {
 		}
 		return null;
 	}
-
+	
+	
+	public FutsalcenterDAO(String centerNo, String centerName, String detailAddress, String charge, String sectionNum,
+			String centerPhone) {
+		super();
+		this.centerNo = centerNo;
+		this.centerName = centerName;
+		this.detailAddress = detailAddress;
+		this.charge = charge;
+		this.sectionNum = sectionNum;
+		this.centerPhone = centerPhone;
+	}
 	public FutsalcenterDAO(String hostNo, String centerName, String city, String ku, String detailAddress,
 			String charge, String sectionNum, String centerPhone, String imgUrl) {
 		super();
@@ -123,8 +134,31 @@ public class FutsalcenterDAO {
 		this.centerPhone = centerPhone;
 		this.imgUrl = imgUrl;
 	}
+	
 	public FutsalcenterDAO() {
 		super();
+	}
+	public FutsalcenterDAO(String centerNo) {
+		super();
+		this.centerNo = centerNo;
+	}
+	public static void getMyCenter(List<FutsalcenterDAO> list,String hostNo){
+		DAO dao = new DAO();
+		ResultSet rs = null;
+		if(dao.createConn()){
+			rs = dao.select(dao.getConn(), "select * from FUTSALCENTER where HOSTNO = '"+hostNo+"'");
+			try {
+				while(rs.next()){
+					list.add(new FutsalcenterDAO(rs.getString(1),rs.getString(2),rs.getString(3),rs.getString(4),rs.getString(5),rs.getString(6),
+							rs.getString(7),rs.getString(8),rs.getString(9),rs.getString(10)));
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			finally{
+				dao.closeConn();
+			}
+		}
 	}
 	public boolean enroll(){
 		DAO dao = new DAO();
@@ -162,4 +196,26 @@ public class FutsalcenterDAO {
 			}
 		}
 	}
+	
+	public boolean delete(String centerNo){
+		DAO dao = new DAO();
+		ResultSet rs = null;
+		if(dao.createConn()){
+			dao.delete(dao.getConn(), "delete from FUTSALCENTER where CENTERNO = '"+centerNo+"'");
+			return true;
+		}
+		return false;
+	}
+	
+	public boolean update(String centerNo){
+		DAO dao = new DAO();
+		ResultSet rs = null;
+		if(dao.createConn()){
+			dao.update(dao.getConn(), "UPDATE FUTSALCENTER SET CENTERNAME ='"+this.centerName+"', CHARGE ='"+this.charge+"', SECTIONNUM ='"+this.sectionNum+"', CENTERPHONE='"+this.centerPhone+"', DETAILADDRESS='"+this.detailAddress+"' where CENTERNO ='"+centerNo+"'");
+			return true;
+		}
+		return false;
+	}
+	
 }
+
