@@ -41,6 +41,26 @@ public class TeamDAO {
 		this.teamName = teamName;
 		this.teamDescription = teamDescription;
 	}
+	
+	public static String getTeamName(String teamNoTwo){
+		DAO dao = new DAO();
+		ResultSet rs = null;
+		if(dao.createConn()){
+			rs = dao.select(dao.getConn(), "select * from TEAM where TEAMNO = '"+teamNoTwo+"'");
+			try {
+				if(rs.next()==true){
+					return rs.getString("TEAMNAME");
+				}
+				else{
+					return null;
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		return null;
+	}
 	public boolean enroll(){
 		DAO dao = new DAO();
 		ResultSet rs = null;
