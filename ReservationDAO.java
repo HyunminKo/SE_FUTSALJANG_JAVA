@@ -77,7 +77,7 @@ public class ReservationDAO {
 		String data[] = new String[2];
 		String charge = null;
 		String centerName = null;
-		if (No.charAt(0) == 1) {
+		if (No.startsWith("1")) {
 			if (dao.createConn()) {
 				rs = dao.select(dao.getConn(), "select * from RESERVATION_PAY where USERNO ='" + No + "'");
 				try {

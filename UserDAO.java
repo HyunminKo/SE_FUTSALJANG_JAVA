@@ -169,7 +169,23 @@ public class UserDAO{
 			}
 		}
 	}
-
+	public static void selectRank(List<UserDAO> list){
+		DAO dao = new DAO();
+		ResultSet rs = null;
+		if(dao.createConn()){
+			rs = dao.select(dao.getConn(), "select * from ( select * from FUTSALUSER ORDER BY USERPOINT DESC ) WHERE ROWNUM < 4");
+			try {
+				while(rs.next()){
+					list.add(new UserDAO(rs.getString("USERNO"),rs.getString("USERNAME"),rs.getString("USERPHONE"),rs.getString("USERID"),rs.getString("USERPW"),rs.getString("USERGRADE"),Integer.parseInt(rs.getString("USERPOINT"))));
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			finally{
+				dao.closeConn();
+			}
+		}
+	}
 	public static String getDataNameNPhone(String userNo) {
 		DAO dao = new DAO();
 		ResultSet rs = null;
