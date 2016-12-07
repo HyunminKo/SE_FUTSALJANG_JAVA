@@ -59,6 +59,17 @@ public class ReservationDAO {
 	public ReservationDAO(){
 		super();
 	}
+	
+	public ReservationDAO(String userNo, String sectionNo, String centerNo, String paymentOption, String bookingDate,
+			String hoursOfUse) {
+		super();
+		this.userNo = userNo;
+		this.sectionNo = sectionNo;
+		this.centerNo = centerNo;
+		this.paymentOption = paymentOption;
+		this.bookingDate = bookingDate;
+		this.hoursOfUse = hoursOfUse;
+	}
 	public ReservationDAO(String userNo, String sectionNo, String centerNo, String paymentOption, String bookingDate, String hoursOfUse, String charge){
 		super();
 		this.userNo = userNo;
@@ -69,7 +80,31 @@ public class ReservationDAO {
 		this.hoursOfUse = hoursOfUse;
 		this.charge = charge;
 	}
-	
+
+	public boolean insert() {
+		DAO dao = new DAO();
+		ResultSet rs = null;
+		if (dao.createConn()) {
+			rs = dao.select(dao.getConn(), "select * from RESERVATION_PAY where BOOKINGDATE ='"+this.bookingDate+"' AND HOURSOFUSE ='" + this.hoursOfUse+"'");
+			try {
+				if (rs.next() != true) {
+					dao.insert(dao.getConn(),
+							"INSERT INTO RESERVATION_PAY (USERNO, SECTIONNO, CENTERNO, PAYMENTOPTION, BOOKINGDATE, HOURSOFUSE) VALUES ('"+this.userNo+"', '"
+									+ this.sectionNo + "','" + this.centerNo+ "','" + this.paymentOption + "','" + this.bookingDate + "','" + this.hoursOfUse
+									+ "')");
+					return true;
+				} else {
+					return false;
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			} finally {
+				dao.closeConn();
+			}
+		}
+		return false;
+	}
+
 	public void select(List<ReservationDAO> list, String No) {
 		DAO dao = new DAO();
 		ResultSet rs = null;
