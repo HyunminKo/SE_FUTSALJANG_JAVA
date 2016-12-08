@@ -173,7 +173,7 @@ public class UserDAO{
 		DAO dao = new DAO();
 		ResultSet rs = null;
 		if(dao.createConn()){
-			rs = dao.select(dao.getConn(), "select * from ( select * from FUTSALUSER ORDER BY USERPOINT DESC ) WHERE ROWNUM < 4");
+			rs = dao.select(dao.getConn(), "select * from ( select * from FUTSALUSER WHERE NOT USERNO=0 ORDER BY USERPOINT DESC ) WHERE ROWNUM < 11");
 			try {
 				while(rs.next()){
 					list.add(new UserDAO(rs.getString("USERNO"),rs.getString("USERNAME"),rs.getString("USERPHONE"),rs.getString("USERID"),rs.getString("USERPW"),rs.getString("USERGRADE"),Integer.parseInt(rs.getString("USERPOINT"))));
