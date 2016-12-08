@@ -92,7 +92,7 @@ public class ReservationDAO {
 		this.bookingDate = bookingDate;
 		this.hoursOfUse = hoursOfUse;
 	}
-	public boolean insert(String userNo) {
+	public boolean insert(String userNo,String userPoint) {
 		DAO dao = new DAO();
 		ResultSet rs = null;
 		if (dao.createConn()) {
@@ -103,7 +103,7 @@ public class ReservationDAO {
 							"INSERT INTO RESERVATION_PAY (USERNO, SECTIONNO, CENTERNO, PAYMENTOPTION, BOOKINGDATE, HOURSOFUSE) VALUES ('"+this.userNo+"', '"
 									+ this.sectionNo + "','" + this.centerNo+ "','" + this.paymentOption + "','" + this.bookingDate + "','" + this.hoursOfUse
 									+ "')");
-					dao.insert(dao.getConn(), "update FUTSALUSER set USERPOINT=USERPOINT+1000 where USERNO = '"+userNo+"'");
+					dao.insert(dao.getConn(), "update FUTSALUSER set USERPOINT=USERPOINT+1000-"+userPoint+" where USERNO = '"+userNo+"'");
 					return true;
 				} else {
 					return false;

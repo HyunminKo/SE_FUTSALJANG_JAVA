@@ -201,4 +201,19 @@ public class UserDAO{
 		}
 		return null;
 	}
+	public static String getUserPoint(String userNo){
+		DAO dao = new DAO();
+		ResultSet rs = null;
+		if(dao.createConn()){
+			rs = dao.select(dao.getConn(), "select * from FUTSALUSER where USERNO = '"+userNo+"'");
+			try {
+				if(rs.next()){
+					return rs.getString("USERPOINT");
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return null;		
+	}
 }
