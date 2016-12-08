@@ -5,6 +5,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.naming.spi.DirStateFactory.Result;
+
 public class ReservationDAO {
 	private String userNo;
 	private String sectionNo;
@@ -81,6 +83,12 @@ public class ReservationDAO {
 		this.charge = charge;
 	}
 
+	public ReservationDAO(String sectionNo, String bookingDate, String hoursOfUse) {
+		super();
+		this.sectionNo = sectionNo;
+		this.bookingDate = bookingDate;
+		this.hoursOfUse = hoursOfUse;
+	}
 	public boolean insert() {
 		DAO dao = new DAO();
 		ResultSet rs = null;
@@ -105,7 +113,7 @@ public class ReservationDAO {
 		return false;
 	}
 
-	public void select(List<ReservationDAO> list, String No) {
+	public void select(List<ReservationDAO> list,List<ReservationDAO> realList, String No) {
 		DAO dao = new DAO();
 		ResultSet rs = null;
 		ResultSet rs2 = null;
@@ -121,7 +129,10 @@ public class ReservationDAO {
 						data = FutsalcenterDAO.getNameNCharge(rs.getString("CENTERNO")).split(":");
 						char secTionNo = (char) ((rs.getInt(2)) + 65);
 						list.add(new ReservationDAO(rs.getString("USERNO"), Character.toString(secTionNo), data[0],
-								rs.getString("PAYMENTOPTION"), rs.getString("BOOKINGDATE"), rs.getString("HOURSOFUSE"),
+								rs.getString("PAYMENTOPTION"), rs.getString("BOOKINGDATE").replace(":", "-"), rs.getString("HOURSOFUSE"),
+								data[1]));
+						realList.add(new ReservationDAO(rs.getString("USERNO"), rs.getString(2), rs.getString(3),
+								rs.getString("PAYMENTOPTION"), rs.getString("BOOKINGDATE").replace(":", "-"), rs.getString("HOURSOFUSE"),
 								data[1]));
 					}
 				} catch (SQLException e) {
@@ -155,5 +166,35 @@ public class ReservationDAO {
 				}
 			}
 		}
+	}
+	
+	public static boolean delete(String userNo, String centerNo, String sectionNo, String hours){
+		DAO dao = new DAO();
+		if(dao.createConn()){
+			if(dao.delete(dao.getConn(), "delete from RESERVATION_PAY where USERNO = "+userNo+" AND CENTERNO='"+centerNo+"' AND SECTIONNO='"+sectionNo+"' AND HOURSOFUSE='"+hours+"'")){
+				return true;
+			}
+			else 
+				return false;
+		}
+		
+		return false;
+	}
+	public static void selectRsvData(List<ReservationDAO> list, String centerNo){
+		DAO dao= new DAO();
+		ResultSet rs = null;
+		if(dao.createConn()){
+			rs = dao.select(dao.getConn(), "select * from RESERVATION_PAY where CENTERNO='"+centerNo+"'");
+			try{
+				while (rs.next()) {
+						list.add(new ReservationDAO(rs.getString(2),rs.getString(5),rs.getString(6)));
+				}
+			} catch(SQLException e){
+				e.printStackTrace();
+			} finally {
+				dao.closeConn();
+			}
+		}
+		
 	}
 }

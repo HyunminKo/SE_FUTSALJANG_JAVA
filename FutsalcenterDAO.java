@@ -163,12 +163,20 @@ public class FutsalcenterDAO {
 	public boolean enroll(){
 		DAO dao = new DAO();
 		ResultSet rs = null;
+		ResultSet rs2 = null;
 		if(dao.createConn()){
 			rs = dao.select(dao.getConn(), "select * from FUTSALCENTER where centerName = '"+this.centerName+"'");
 			try {
 				if(rs.next()!=true){
 					dao.insert(dao.getConn(), "INSERT INTO FUTSALCENTER (CENTERNO, HOSTNO, CENTERNAME, CITY, KU,DETAILADDRESS, CHARGE, SECTIONNUM, CENTERPHONE,IMGURL) VALUES (centerSeq.nextval,'"+this.hostNo+"','"+this.centerName+"','"+this.city+"','"+this.ku+"','"+this.detailAddress+"','"+this.charge+"','"+this.sectionNum+"','"+this.centerPhone+"','"+this.imgUrl+"')");
-					return true;
+					int sectionNum = Integer.parseInt(this.sectionNum);
+					rs2 = dao.select(dao.getConn(), "select CENTERNO from FUTSALCENTER where centerName = '"+this.centerName+"'");
+					if(rs2.next()==true){
+						for(int i = 0 ; i < sectionNum; i++){
+							dao.insert(dao.getConn(), "INSERT INTO SECTION (CENTERNO, SECTIONNO) VALUES ('"+rs2.getString("CENTERNO")+"','"+i+"')");
+						}
+						return true;
+					}
 				}
 				else
 					return false;
@@ -199,7 +207,6 @@ public class FutsalcenterDAO {
 	
 	public boolean delete(String centerNo){
 		DAO dao = new DAO();
-		ResultSet rs = null;
 		if(dao.createConn()){
 			dao.delete(dao.getConn(), "delete from FUTSALCENTER where CENTERNO = '"+centerNo+"'");
 			return true;
@@ -209,7 +216,6 @@ public class FutsalcenterDAO {
 	
 	public boolean update(String centerNo){
 		DAO dao = new DAO();
-		ResultSet rs = null;
 		if(dao.createConn()){
 			dao.update(dao.getConn(), "UPDATE FUTSALCENTER SET CENTERNAME ='"+this.centerName+"', CHARGE ='"+this.charge+"', SECTIONNUM ='"+this.sectionNum+"', CENTERPHONE='"+this.centerPhone+"', DETAILADDRESS='"+this.detailAddress+"' where CENTERNO ='"+centerNo+"'");
 			return true;

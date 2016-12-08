@@ -61,6 +61,27 @@ public class TeamDAO {
 		
 		return null;
 	}
+	public static void getMyTeam(List<TeamDAO> list,String userNo){
+		DAO dao = new DAO();
+		ResultSet rs = null;
+		ResultSet rs2 = null;
+		if(dao.createConn()){
+			rs = dao.select(dao.getConn(), "select * from BELONGTO where USERNO = '"+userNo+"'");
+			try {
+				while(rs.next()){
+					rs2 = dao.select(dao.getConn(), "select * from TEAM where TEAMNO = '"+rs.getString("TEAMNO")+"'");
+					if(rs2.next()==true){
+						list.add(new TeamDAO(rs2.getString("TEAMNO"),rs2.getString("TEAMNAME"),rs2.getString("DESCRIPTION")));
+					}
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			finally{
+				dao.closeConn();
+			}
+		}
+	}
 	public boolean enroll(){
 		DAO dao = new DAO();
 		ResultSet rs = null;
@@ -96,5 +117,20 @@ public class TeamDAO {
 			}
 		}
 	}
-	
+	public boolean update(String teamNo){
+		DAO dao = new DAO();
+		if(dao.createConn()){
+			dao.update(dao.getConn(), "UPDATE TEAM SET TEAMNAME='"+this.teamName+"', DESCRIPTION='"+this.teamDescription+"' WEHRE TEAMNO='"+teamNo+"'");
+			return true;
+		}
+		return false;
+	}
+	public boolean delete(String teamNo){
+		DAO dao = new DAO();
+		if(dao.createConn()){
+			dao.delete(dao.getConn(), "delete from TEAM where TEAMNO = '"+teamNo+"'");
+			return true;
+		}
+		return false;
+	}
 }
