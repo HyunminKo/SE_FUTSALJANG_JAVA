@@ -58,6 +58,10 @@ public class ReservationDAO {
 	public void setCharge(String charge) {
 		this.charge = charge;
 	}
+	
+	public ReservationDAO(){
+		super();
+	}
 	public ReservationDAO(String hoursOfUse){
 		super();
 		this.hoursOfUse = hoursOfUse;
