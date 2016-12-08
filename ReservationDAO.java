@@ -2,10 +2,8 @@
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
-import javax.naming.spi.DirStateFactory.Result;
 
 public class ReservationDAO {
 	private String userNo;
@@ -58,8 +56,13 @@ public class ReservationDAO {
 	public void setCharge(String charge) {
 		this.charge = charge;
 	}
+	
 	public ReservationDAO(){
 		super();
+	}
+	public ReservationDAO(String hoursOfUse){
+		super();
+		this.hoursOfUse = hoursOfUse;
 	}
 	
 	public ReservationDAO(String userNo, String sectionNo, String centerNo, String paymentOption, String bookingDate,
@@ -181,6 +184,7 @@ public class ReservationDAO {
 		
 		return false;
 	}
+	
 	public static void selectRsvData(List<ReservationDAO> list, String centerNo){
 		DAO dao= new DAO();
 		ResultSet rs = null;

@@ -182,6 +182,8 @@ public class FutsalcenterDAO {
 					return false;
 			} catch (SQLException e) {
 				e.printStackTrace();
+			} finally{
+				dao.closeConn();
 			}
 		}
 		return false;
@@ -207,10 +209,23 @@ public class FutsalcenterDAO {
 	
 	public boolean delete(String centerNo){
 		DAO dao = new DAO();
+		ResultSet rs = null;
 		if(dao.createConn()){
-			dao.delete(dao.getConn(), "delete from FUTSALCENTER where CENTERNO = '"+centerNo+"'");
-			return true;
+			rs = dao.select(dao.getConn(), "select * from RESERVATION_PAY where CENTERNO = '" + centerNo + "'");
+			try {
+				if(rs.next()!=true){
+					dao.delete(dao.getConn(), "delete from FUTSALCENTER where CENTERNO = '"+centerNo+"'");
+					return true;				
+				}			
+				else
+					return false;
+			} catch (SQLException e) {
+				e.printStackTrace();
+			} finally{
+				dao.closeConn();
+			}
 		}
+		
 		return false;
 	}
 	
