@@ -82,7 +82,7 @@ public class TeamDAO {
 			}
 		}
 	}
-	public boolean enroll(){
+	public boolean enroll(String userNo){
 		DAO dao = new DAO();
 		ResultSet rs = null;
 		if(dao.createConn()){
@@ -90,7 +90,13 @@ public class TeamDAO {
 			try {
 				if(rs.next()!=true){
 					dao.insert(dao.getConn(), "INSERT INTO TEAM (TEAMNO, TEAMNAME, DESCRIPTION) VALUES (teamSeq.nextval,'"+this.teamName+"','"+this.teamDescription+"')");
-					return true;
+					rs = dao.select(dao.getConn(), "select * from TEAM where teamName = '"+this.teamName+"'");
+					if(rs.next()==true){
+						dao.insert(dao.getConn(), "INSERT INTO BELONGTO (USERNO, TEAMNO) VALUES ('"+userNo+"','"+rs.getString("TEAMNO")+"')");
+						return true;
+					}else{
+						return false;
+					}
 				}
 				else
 					return false;
@@ -120,7 +126,7 @@ public class TeamDAO {
 	public boolean update(String teamNo){
 		DAO dao = new DAO();
 		if(dao.createConn()){
-			dao.update(dao.getConn(), "UPDATE TEAM SET TEAMNAME='"+this.teamName+"', DESCRIPTION='"+this.teamDescription+"' WEHRE TEAMNO='"+teamNo+"'");
+			dao.update(dao.getConn(), "UPDATE TEAM SET TEAMNAME = '"+this.teamName+"', DESCRIPTION = '"+this.teamDescription+"' where TEAMNO='"+teamNo+"'");
 			return true;
 		}
 		return false;
