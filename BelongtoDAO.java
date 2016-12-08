@@ -31,9 +31,9 @@ public class BelongtoDAO {
 		DAO dao = new DAO();
 		ResultSet rs = null;
 		if(dao.createConn()){
-			rs = dao.select(dao.getConn(), "select * from BELONGTO");
+			rs = dao.select(dao.getConn(), "select * from BELONGTO WHERE='"+userNo+"'");
 			try {
-				if(rs.next()==true){
+				if(rs!=null&&rs.next()){
 					return rs.getString("TEAMNO");
 				}
 			} catch (SQLException e) {
