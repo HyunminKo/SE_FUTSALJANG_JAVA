@@ -89,9 +89,9 @@ public class ReservationDAO {
 			try {
 				if (rs.next() != true) {
 					dao.insert(dao.getConn(),
-							"INSERT INTO RESERVATION_PAY (USERNO, SECTIONNO, CENTERNO, PAYMENTOPTION, BOOKINGDATE, HOURSOFUSE) VALUES ('"+this.userNo+"', '"
-									+ this.sectionNo + "','" + this.centerNo+ "','" + this.paymentOption + "','" + this.bookingDate + "','" + this.hoursOfUse
-									+ "')");
+							"INSERT INTO RESERVATION_PAY (USERNO, SECTIONNO, CENTERNO, PAYMENTOPTION, BOOKINGDATE, HOURSOFUSE) VALUES ("+this.userNo+", "
+									+ this.sectionNo + "," + this.centerNo+ ",'" + this.paymentOption + "','" + this.bookingDate + "'," + this.hoursOfUse
+									+ ")");
 					return true;
 				} else {
 					return false;
