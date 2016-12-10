@@ -143,4 +143,16 @@ public class HostDAO{
 			}
 		}
 	}
+	public static boolean drop(String hostNo){
+		DAO dao = new DAO();
+		if(dao.createConn()){
+			if(dao.delete(dao.getConn(), "delete from HOST where HOSTNO = '"+hostNo+"'")){
+				return true;
+			}
+			else 
+				return false;
+		}
+		
+		return false;
+	}
 }
