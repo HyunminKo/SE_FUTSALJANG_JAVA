@@ -63,7 +63,7 @@ public class MatchDAO {
 	public boolean insert(){
 		DAO dao = new DAO();
 		if(dao.createConn()){
-			if(dao.insert(dao.getConn(), "INSERT INTO MATCH (TEAMNOONE, TEAMNOTWO, MATCHDATE VALUES ('"+this.teamNoOne+"','"+this.teamNoTwo+"','"+this.matchDate+"')"))
+			if(dao.insert(dao.getConn(), "INSERT INTO MATCH (TEAMNOONE, TEAMNOTWO, MATCHDATE) VALUES ('"+this.teamNoOne+"','"+this.teamNoTwo+"','"+this.matchDate+"')"))
 				return true;
 			else
 				return false;

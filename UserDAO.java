@@ -216,4 +216,15 @@ public class UserDAO{
 		}
 		return null;		
 	}
+	public static boolean delete(String userNo){
+		DAO dao = new DAO();
+		ResultSet rs = null;
+		if(dao.createConn()){
+			if(dao.delete(dao.getConn(), "delete from FUTSALUSER where USERNO='"+userNo+"'")){
+				return true;
+			}
+			return false;
+		}
+		return false;
+	}
 }
