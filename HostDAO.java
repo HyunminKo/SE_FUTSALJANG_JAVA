@@ -147,6 +147,10 @@ public class HostDAO{
 		DAO dao = new DAO();
 		ResultSet rs = null;
 		if(dao.createConn()){
+			rs = dao.select(dao.getConn(), "select * from RESERVATION_PAY R, HOST H,FUTSALCENTER F WHERE H.HOSTNO = '"+hostNo+"' AND H.HOSTNO = F.CENTERNO AND F.CENTERNO = R.CENTERNO");
+			if(rs != null){
+				return false;
+			}
 			if(dao.delete(dao.getConn(), "delete from HOST where HOSTNO='"+hostNo+"'")){
 				return true;
 			}
