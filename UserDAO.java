@@ -173,8 +173,10 @@ public class UserDAO{
 		DAO dao = new DAO();
 		ResultSet rs = null;
 		if(dao.createConn()){
-			rs = dao.select(dao.getConn(), "select * from ( select * from FUTSALUSER WHERE NOT USERNO=0 ORDER BY USERPOINT DESC ) WHERE ROWNUM < 11");
+			rs = dao.select(dao.getConn(), "select * from ( select * from FUTSALUSER WHERE NOT USERNO=0 ORDER BY USERPOINT DESC ) WHERE ROWNUM < 11 AND USERGRADE='VIP'");
 			try {
+				if(rs == null)
+					return;
 				while(rs.next()){
 					list.add(new UserDAO(rs.getString("USERNO"),rs.getString("USERNAME"),rs.getString("USERPHONE"),rs.getString("USERID"),rs.getString("USERPW"),rs.getString("USERGRADE"),Integer.parseInt(rs.getString("USERPOINT"))));
 				}
@@ -220,10 +222,20 @@ public class UserDAO{
 		DAO dao = new DAO();
 		ResultSet rs = null;
 		if(dao.createConn()){
-			if(dao.delete(dao.getConn(), "delete from FUTSALUSER where USERNO='"+userNo+"'")){
-				return true;
+			rs = dao.select(dao.getConn(), "select * from RESERVATION_PAY where USERNO = '" + userNo + "'");
+			try {
+				if(rs.next())
+					return false;
+				if(dao.delete(dao.getConn(), "delete from FUTSALUSER where USERNO='"+userNo+"'")){
+					return true;
+				}else
+					return false;
+			} catch (Exception e) {
+
+			}finally {
+				dao.closeConn();
 			}
-			return false;
+			
 		}
 		return false;
 	}
